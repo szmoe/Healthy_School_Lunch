@@ -5,9 +5,11 @@
 library(decisionSupport)
 
 make_variables<-function(est,n=1)
+  
 { x<-random(rho=est, n=n)
 for(i in colnames(x)) assign(i, as.numeric(x[1,i]),envir=.GlobalEnv)}
-make_variables(estimate_read_csv("Input_lunch.csv"))
+
+make_variables(decisionSupport::estimate_read_csv(paste("Input_lunch.csv")))
 
 lunch_service_function <- function(x, varnames) {
 
@@ -112,7 +114,7 @@ Cost_establishment <- Cost_construction + Cost_installation +
                       Cost_equipment + Cost_utensil
 
 #Reduce cost of establishment if there is initial investment (for year 1 only)
-Initial_investment_yes_no <- chance_event(if_investment,
+Initial_investment_yes_no <- chance_event(If_investment,
                                           value_if = 1,
                                           value_if_not = 0)
 
@@ -220,7 +222,7 @@ Worker_low_skill_yes_no <- chance_event(Worker_low_skill,
                                         value_if = 1,
                                         value_if_not = 0)
 
-Cost-training_total <- if (Worker_low_skill_yes_no == 1) {
+Cost_training_total <- if (Worker_low_skill_yes_no == 1) {
   Cost_training_total = vv (Cost_training_adjusted +
                             (Cost_training_adjusted * Cost_worker_low_skill),
                             var_CV, n_years,
@@ -252,11 +254,9 @@ Total_cost_with_intervention <- Cost_summer_cooking_class +
                                 Cost_electricity_total +
                                 Cost_training_total + 
                                 Cost_free_lunch + 
-                                Remaining_cost
+                                Remaining_cost +
+                                Cost_establishment_with_investment
 
-#Add establishment cost for year 1
-Total_cost_with_intervention [1] <- Total_cost_with_intervention +
-                                    Cost_establishment_with_investment
 
 #Find intervention result
 Lunch_service_intervention_result <- Total_benefit_Intervention -
@@ -304,8 +304,7 @@ Lunch_service_simulation_result<- mcSimulation (
                                 estimate = estimate_read_csv("Input_lunch.csv"),
                                 model_function = lunch_service_function,
                                 numberOfModelRuns = 1000,
-                                functionSyntax = "plainNames"
-)
+                                functionSyntax = "plainNames")
 
 #plot distributions for NPV_lunch_service and NPV_no_lunch_service
 plot_distributions(mcSimulation_object = Lunch_service_simulation_result, 
