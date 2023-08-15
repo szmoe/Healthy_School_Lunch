@@ -291,8 +291,7 @@ NPV_no_interv <- discount(x = Lunch_service_no_intervention_result,
 return(list(NPV_lunch_service = NPV_interv,
             NPV_no_lunch_service = NPV_no_interv,
             decision = NPV_interv - NPV_no_interv,
-            Cashflow_lunch_service = Lunch_service_intervention_result -
-                                     Lunch_service_no_intervention_result))
+            Cashflow_lunch_service = Lunch_service_intervention_result))
                             
 }
 
