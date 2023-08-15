@@ -298,7 +298,6 @@ return(list(NPV_lunch_service = NPV_interv,
 
 #Run the Monte Carlo Simulation
 
-library(readr)
 input_table <- read.csv("Input_lunch.csv")
 
 Lunch_service_simulation_result<- mcSimulation (
@@ -344,6 +343,5 @@ pls_result <- plsr.mcSimulation(object = Lunch_service_simulation_result,
                                 (Lunch_service_simulation_result$y)[1], 
                                 ncomp = 1)
 
-input_table <- read.csv("Input_lunch.csv")
 plot_pls(pls_result, input_table = input_table, threshold = 0)
 
