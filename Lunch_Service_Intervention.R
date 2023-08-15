@@ -274,7 +274,7 @@ Cost_no_intervention <- vv (Cost_supplementary_food,
 
 #Find result for no intervention
 Lunch_service_no_intervention_result <- Benefit_no_intervention -
-                                        Cost-no_intervention
+                                        Cost_no_intervention
 
 #Calculate the Net Present Value (NPV) with discount rate
 
@@ -291,7 +291,8 @@ NPV_no_interv <- discount(x = Lunch_service_no_intervention_result,
 return(list(NPV_lunch_service = NPV_interv,
             NPV_no_lunch_service = NPV_no_interv,
             decision = NPV_interv - NPV_no_interv,
-            Cashflow_lunch_service = Lunch_service_intervention_result))
+            Cashflow_lunch_service = Lunch_service_intervention_result -
+                                     Lunch_service_no_intervention_result))
                             
 }
 
@@ -331,11 +332,11 @@ evpi <- multi_EVPI(mc = mcSimulation_table, first_out_var = "NPV_lunch_service")
 plot_evpi(evpi, decision_vars = "decision")
 
 #Find PLS result
-#pls_result <- plsr.mcSimulation(object = Lunch_service_simulation_result,
-                                #resultName = names
-                                #(Lunch_service_simulation_result$y)[#], 
-                                #ncomp = 1)
+pls_result <- plsr.mcSimulation(object = Lunch_service_simulation_result,
+                                resultName = names
+                                (Lunch_service_simulation_result$y)[1], 
+                                ncomp = 1)
 
-#input_table <- read.csv("Input_lunch.csv")
-#plot_pls(pls_result, input_table = input_table, threshold = 0)
+input_table <- read.csv("Input_lunch.csv")
+plot_pls(pls_result, input_table = input_table, threshold = 0)
 
