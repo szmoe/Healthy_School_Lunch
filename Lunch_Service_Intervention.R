@@ -298,8 +298,8 @@ return(list(NPV_lunch_service = NPV_interv,
 
 #Run the Monte Carlo Simulation
 
-#library(readr)
-#input_table <- read.csv("Input_lunch.csv")
+library(readr)
+input_table <- read.csv("Input_lunch.csv")
 
 Lunch_service_simulation_result<- mcSimulation (
                                 estimate = estimate_read_csv("Input_lunch.csv"),
@@ -320,7 +320,7 @@ plot_distributions(mcSimulation_object = Lunch_service_simulation_result,
 
 # Cashflow of the Lunch_service_intervention
 plot_cashflow(mcSimulation_object = Lunch_service_simulation_result, 
-              cashflow_var_name = " Cashflow_lunch_service")
+              cashflow_var_name = "Cashflow_lunch_service")
 
 #Find EVPI 
 mcSimulation_table <- data.frame(Lunch_service_simulation_result$x, 
@@ -330,6 +330,13 @@ evpi <- multi_EVPI(mc = mcSimulation_table, first_out_var = "NPV_lunch_service")
 
 
 plot_evpi(evpi, decision_vars = "decision")
+
+compound_figure(mcSimulation_object = Lunch_service_simulation_result, 
+                input_table = input_table, 
+                plsrResults = Lunch_service_simulation_result, 
+                EVPIresults = evpi, decision_var_name = "NPV_lunch_service", 
+                cashflow_var_name = "Cashflow_lunch_service", 
+                base_size = 5)
 
 #Find PLS result
 pls_result <- plsr.mcSimulation(object = Lunch_service_simulation_result,
