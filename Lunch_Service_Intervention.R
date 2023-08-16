@@ -317,6 +317,11 @@ plot_distributions(mcSimulation_object = Lunch_service_simulation_result,
                    method = 'hist_simple_overlay', 
                    base_size = 7)
 
+plot_distributions(mcSimulation_object = Lunch_service_simulation_result, 
+                   vars = c("NPV_lunch_service", "NPV_no_lunch_service"),
+                   method = 'boxplot') 
+                   
+
 #plot distribution for the decision
 plot_distributions(mcSimulation_object = Lunch_service_simulation_result, 
                    vars = "decision",
