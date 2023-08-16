@@ -13,105 +13,100 @@ make_variables(decisionSupport::estimate_read_csv(paste("Input_lunch.csv")))
 
 lunch_service_function <- function(x, varnames) {
 
-#Add risk-adjusted benefits if intervened 
+# Add risk-adjusted benefits if intervened 
   
-#Add percent non-compliance that can affect external funding
-Non_compliance_risk_funding <- min(Te_noncom,
-                                   Pa_noncom_ng,
-                                   St_noncom,
-                                   No_food_safety)
+Income_lunchsales <- Number_student_paid * Unit_lunch_value
 
-Non_compliance_risk_lunchsale <- min(Te_noncom,
-                                     Pa_noncom_ng,
-                                     Pa_noncom_sf,
-                                     No_food_safety)
+# If students like lunch
 
-#Increase in benefits due to intervention
-Increased_organizational_funding <- Og_funding*Og_increased_funding
+Chance_student_like_yes_no <- chance_event(Chance_student_like,
+                                           value_if = 1,
+                                           value_if_not = 0)
 
-Increased_individual_funding <- Do_funding*Do_increased_funding
+Adjusted_income_lunchsales <- if (Chance_student_like_yes_no == 1) {
+  vv (Income_lunchsales + (Income_lunchsales * If_student_like_lunch),
+      var_CV, n_years,
+      relative_trend = inflation_rate)
+} else {
+  vv (Income_lunchsales,
+      var_CV, n_years,
+      relative_trend = inflation_rate)
+}
 
-Increased_enrollment <- Profit_enrollment*Profit_increased_enrollment
-                    
-Income_lunchsales <- Unit_lunch_value * Number_student_paid
-
-Saving_supplementary <- Cost_supplementary_food * Saving_supplementary_food
-
-#Risk_adjusted benefits if lunch policy is implemented
-
+# If lunch policy for lunchsale
 Lunch_policy_yes_no <- chance_event(If_lunch_policy,
                                     value_if = 1,
                                     value_if_not = 0)
 
-#Extra funding from organizations
-Benefit_organizational_funding <- if (Lunch_policy_yes_no == 1) {
-  Benefit_organizational_funding = vv (Increased_organizational_funding + 
-                                       Policy_increase_Ogfunding + 
-                                         (Non_compliance_risk_funding *
-                                          Increased_organizational_funding), 
-                                       var_CV, n_years,
-                                       relative_trend = inflation_rate)
-                                      
- 
+Total_income_lunchsales <- if (Lunch_policy_yes_no == 1) {
+  vv (Adjusted_income_lunchsales + Policy_increase_lunchsales,
+      var_CV, n_years,
+      relative_trend = inflation_rate)
 } else {
-  vv (Increased_organizational_funding +
-      (Non_compliance_risk_funding *
-      Increased_organizational_funding),
+  vv (Adjusted_income_lunchsales,
       var_CV, n_years,
       relative_trend = inflation_rate)
 }
 
-#Increased funding from organization starts from year 2
-Benefit_organizational_funding[1] <- 0
-
-#Extra funding from individual donors
-Benefit_individual_funding <- if (Lunch_policy_yes_no == 1) {
-  Benefit_individual_funding = vv (Increased_individual_funding +
-                                   Policy_increase_Dofunding +
-                                  (Increased_individual_funding * 
-                                   Non_compliance_risk_funding),
-                                   var_CV, n_years,
-                                   relative_trend = inflation_rate)
+# If lunch policy for organizational funding
+Total_organizational_funding <- if (Lunch_policy_yes_no == 1) {
+  
+  vv (Og_funding + (Og_funding * Og_increased_funding) + 
+        Policy_increase_Ogfunding,
+      var_CV, n_years,
+      relative_trend = inflation_rate)
 } else {
-  vv (Increased_individual_funding +
-      (Increased_individual_funding * Non_compliance_risk_funding),
+  vv (Og_funding + (Og_funding * Og_increased_funding),
       var_CV, n_years,
       relative_trend = inflation_rate)
 }
 
-#Extra lunch sales
-Benefit_lunchsales <- if (Lunch_policy_yes_no == 1) {
-  Benefit_lunchsales = vv (Income_lunchsales + Policy_increase_lunchsales +
-                           (Income_lunchsales * Non_compliance_risk_lunchsale),
-                           var_CV, n_years,
-                           relative_trend = inflation_rate)
+# If lunch policy for individual funding
+Total_individual_funding <- if (Lunch_policy_yes_no == 1) {
+  vv (Do_funding + (Do_funding * Do_increased_funding) + 
+        Policy_increase_Dofunding,
+      var_CV, n_years,
+      relative_trend = inflation_rate)
+  
 } else {
-  vv (Income_lunchsales + (Income_lunchsales * Non_compliance_risk_lunchsale),
+  vv (Do_funding + (Do_funding * Do_increased_funding),
       var_CV, n_years,
       relative_trend = inflation_rate)
 }
 
-#Extra income from increased enrollment
-Benefit_enrollment <- vv (Increased_enrollment + 
-                          (Increased_enrollment * Non_compliance_risk_funding),
-                          var_CV, n_years,
-                          relative_trend = inflation_rate)
-
-#Enrollment increased from year 2
-Benefit_enrollment[1] <- 0
-
-#Saving from reduced cost of supplementary food
-Saving_supplementary_food <- vv (Saving_supplementary,
+# Saving from reduced supplementary food cost
+Saving_supplementary_food <- vv (Cost_supplementary_food *
+                                   Saving_supplementary_food,
                                  var_CV, n_years,
                                  relative_trend = inflation_rate)
 
-Total_benefit_Intervention <- Benefit_organizational_funding +
-                              Benefit_individual_funding +
-                              Benefit_lunchsales +
-                              Benefit_enrollment +
-                              Saving_supplementary_food +
-                              Og_funding + Do_funding +
-                              Profit_enrollment
+# Income from enrollment
+Income_enrollment <- vv (Profit_enrollment + (Profit_enrollment *
+                                            Profit_increased_enrollment),
+                         var_CV, n_years,
+                         relative_trend = inflation_rate)
+
+# Income if summer cooking class
+Summer_cooking_class_yes_no <- chance_event(If_summer_class,
+                                            value_if = 1,
+                                            value_if_not = 0)
+Income_summer_cooking_class <- if (Summer_cooking_class_yes_no == 1) {
+  
+  vv (Profit_summer_class,
+      var_CV, n_years,
+      relative_trend = inflation_rate)
+} else {
+  Income_summer_cooking_class <- 0
+}
+
+Total_benefit_intervention <-     Total_income_lunchsales +
+                                  Total_organizational_funding +
+                                  Total_individual_funding +
+                                  Saving_supplementary_food +
+                                  Income_summer_cooking_class +
+                                  Income_enrollment
+                                  
+                              
   
 #Add risk-adjusted cost if intervened
 
@@ -125,7 +120,7 @@ Initial_investment_yes_no <- chance_event(If_investment,
                                           value_if_not = 0)
 
 Cost_establishment_with_investment <- if (Initial_investment_yes_no == 1) {
-  vv (Cost_establishment * Initial_investment,
+  vv (Cost_establishment - (Cost_establishment * Initial_investment),
       var_CV = var_CV,
       n = 1,
       relative_trend = inflation_rate)
@@ -158,7 +153,7 @@ Natural_hazard_yes_no <- chance_event(If_natural_hazard,
 
 Cost_maintenance_total <- if (Natural_hazard_yes_no == 1) {
   Cost_maintenance_total = vv (Cost_maintenance + 
-                              (Cost_natural_hazard * Cost_maintenance),
+                              Cost_natural_hazard,
                               var_CV, n_years,
                               relative_trend = inflation_rate)
 } else {
@@ -174,7 +169,7 @@ Power_outage_yes_no <- chance_event(If_power_outage,
 
 Cost_food_waste_loss <- if (Power_outage_yes_no == 1) {
   Cost_food_waste_loss = vv (Food_waste_loss +
-                             (Cost_power_outage_food * Food_waste_loss),
+                            Cost_power_outage_food,
                              var_CV, n_years,
                              relative_trend = inflation_rate)
 } else {
@@ -185,7 +180,7 @@ Cost_food_waste_loss <- if (Power_outage_yes_no == 1) {
 
 Cost_fuel_total <- if (Power_outage_yes_no == 1) {
   Cost_fuel_total = vv (Cost_fuel +
-                        (Cost_power_outage_fuel * Cost_fuel),
+                        Cost_power_outage_fuel,
                         var_CV, n_years,
                         relative_trend = inflation_rate)
 } else {
@@ -196,7 +191,7 @@ Cost_fuel_total <- if (Power_outage_yes_no == 1) {
 
 Cost_electricity_total <- if (Power_outage_yes_no == 1) {
   Cost_electricity_total = vv (Cost_electricity -
-                               (Cost_electricity * Saving_electricity),
+                                Saving_electricity,
                                var_CV, n_years,
                                relative_trend = inflation_rate)
 } else {
@@ -205,23 +200,6 @@ Cost_electricity_total <- if (Power_outage_yes_no == 1) {
                                relative_trend = inflation_rate)
 }
 
-# Training cost if low knowledge and low skill
-
-#Adjuted training cost if nutrionist has low nutrition knowledge and skill
-Nu_low_skill_yes_no <- chance_event(Nu_low_skill,
-                                    value_if = 1,
-                                    value_if_not = 0)
-
-Cost_training_adjusted <- if (Nu_low_skill_yes_no == 1) {
-  Cost_training_adjusted = vv (Cost_training +
-                               (Cost_training * Cost_nu_low_skill),
-                               var_CV, n_years,
-                               relative_trend = inflation_rate)
-} else {
-  Cost_training_adjusted = vv (Cost_training,
-                               var_CV, n_years,
-                               relative_trend = inflation_rate)
-}
 
 #Total cost of training if workers have low skill
 Worker_low_skill_yes_no <- chance_event(Worker_low_skill,
@@ -229,12 +207,12 @@ Worker_low_skill_yes_no <- chance_event(Worker_low_skill,
                                         value_if_not = 0)
 
 Cost_training_total <- if (Worker_low_skill_yes_no == 1) {
-  Cost_training_total = vv (Cost_training_adjusted +
-                            (Cost_training_adjusted * Cost_worker_low_skill),
+  Cost_training_total = vv (Cost_training +
+                           Cost_worker_low_skill,
                             var_CV, n_years,
                             relative_trend = inflation_rate)
 } else {
-  Cost_training_total = vv (Cost_training_adjusted,
+  Cost_training_total = vv (Cost_training,
                             var_CV, n_years,
                             relative_trend = inflation_rate)
 }
@@ -253,7 +231,7 @@ Remaining_cost <- vv (Cost_water + Cost_cooking_gas +
                       relative_trend = inflation_rate)
 
 #Add total cost with intervention
-Total_cost_with_intervention <- Cost_summer_cooking_class +
+Total_cost_intervention <- Cost_summer_cooking_class +
                                 Cost_maintenance_total +
                                 Cost_food_waste_loss + 
                                 Cost_fuel_total +
@@ -265,8 +243,8 @@ Total_cost_with_intervention <- Cost_summer_cooking_class +
 
 
 #Find intervention result
-Lunch_service_intervention_result <- Total_benefit_Intervention -
-                                     Total_cost_with_intervention
+Lunch_service_intervention_result <- Total_benefit_intervention -
+                                     Total_cost_intervention
 
 #Add benefit without intervention
 Benefit_no_intervention <- vv (Og_funding + Do_funding + Profit_enrollment,
