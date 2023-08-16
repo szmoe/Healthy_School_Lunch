@@ -1,24 +1,24 @@
 variable,distribution,lower,median,upper,label
 n_years,const,5,,5,number of years (yr)
 var_CV,tnorm_0_1,0.1,,0.5,coefficient of variation (%)
-discount_rate,posnorm,4,,8,discount rate (%)
+discount_rate,posnorm,1,,3,discount rate (%)
 inflation_rate,posnorm,1,,3,Inflation rate (%)
 
 Chance_student_like,tnorm_0_1,0.2,,0.5,Chance that students like lunch (%)
 If_student_like_lunch,tnorm_0_1,0.3,,0.5,Percent increase in lunch sales if student likes the lunch provided by school (%)
 
 Worker_low_skill,tnorm_0_1,0.01,,0.05,Risk low skill (knowledge) of kitchen workers (%)
-Cost_worker_low_skill,posnorm,500,,1000,Cost_worker_low_skill (USD/ year)
+Cost_worker_low_skill,posnorm,5000,,10000,Cost_worker_low_skill (USD/ year)
 
-Food_waste_loss,posnorm,200,,500,Amount of food waste and loss (USD/yr)
+Food_waste_loss,posnorm,2000,,5000,Amount of food waste and loss (USD/yr)
 
 If_natural_hazard,tnorm_0_1,0.001,,0.003,Risk of natural hazard (%)
 Cost_natural_hazard,posnorm,1000,,30000,Cost_natural_hazard (USD/ yr)
 
 If_power_outage,tnorm_0_1,0.002,,0.005,Risk of power outage (%)
-Cost_power_outage_fuel,posnorm,1000,,3000,Cost_power_outage_fuel (%)
-Cost_power_outage_food,posnorm,500,,800,Cost_power_outage_food (%)
-Saving_electricity,posnorm,100,,1000,Saving electricity (%)
+Cost_power_outage_fuel,posnorm,10000,,30000,Cost_power_outage_fuel (%)
+Cost_power_outage_food,posnorm,5000,,8000,Cost_power_outage_food (%)
+Saving_electricity,posnorm,1000,,5000,Saving electricity (%)
 
 If_lunch_policy,tnorm_0_1,0.3,,0.5,Chance of lunch policy (%)
 Policy_increase_lunchsales,posnorm,10000,,30000,Increased lunch sales (USD/yr)
@@ -28,8 +28,8 @@ If_investment,tnorm_0_1,0.3,,0.5,Chance of investment (%)
 Initial_investment,tnorm_0_1,0.2,,0.5,Initial investment (%)
 
 If_summer_class,tnorm_0_1,0.2,,0.5,Chance of summer cooking class (%)
-Profit_summer_class,posnorm,1000,,3000,Profit from summer cooking class (USD/yr)
-Cost_summer_class,posnorm,200,,800,Cost for summer cooking class (USD/yr)
+Profit_summer_class,posnorm,5000,,10000,Profit from summer cooking class (USD/yr)
+Cost_summer_class,posnorm,2000,,8000,Cost for summer cooking class (USD/yr)
 
 Og_increased_funding,tnorm_0_1,0.3,,0.6,Increased funding from organization (%)
 Do_increased_funding,tnorm_0_1,0.2,,0.5,Increased funding from individual donors (%)
@@ -37,25 +37,25 @@ Profit_increased_enrollment,tnorm_0_1,0.2,,0.5,Increased profit from increased e
 Unit_lunch_value,posnorm,0.3,,5,Lunch value per unit (USD/unit)
 Saving_supplementary_food,tnorm_0_1,0.3,,0.6,Saving from reduced cost of supplementary food (%)
 
-Cost_construction,posnorm,1000,,3000,Cost of kitchen construction or renovation (USD)
-Cost_installation,posnorm,1000,,2000,Cost of kitchen installation (USD)
-Cost_equipment,posnorm,500,,2000,Cost of equipment (USD)
-Cost_utensil,posnorm,200,,2000,Cost of kitchen utensil (USD)
+Cost_construction,posnorm,10000,,30000,Cost of kitchen construction or renovation (USD)
+Cost_installation,posnorm,10000,,20000,Cost of kitchen installation (USD)
+Cost_equipment,posnorm,5000,,20000,Cost of equipment (USD)
+Cost_utensil,posnorm,2000,,20000,Cost of kitchen utensil (USD)
 
-Cost_electricity,posnorm,1000,,3000,Cost of electricity (USD/ yr)
-Cost_water,posnorm,500,,2000,Cost of water (USD/yr)
-Cost_cooking_gas,posnorm,500,,2000,Cost of cooking gas (USD/yr)
-Cost_fuel,posnorm,500,,2000,Cost of fuel (USD/yr)
-Cost_fresh_goods,posnorm,1000,,3000,Cost of fresh goods (USD/ yr)
-Cost_dry_goods,posnorm,1000,,3000,Cost of dry goods (USD/ yr)
-Cost_salary,posnorm,1000,,2000,Cost of payment for staff (USD/ yr)
-Cost_training,posnorm,500,,1500,Cost of training (USD/ yr)
-Cost_maintenance,posnorm,500,,1000,Cost of maintenance (USD/ yr)
-Cost_menu_printing,posnorm,200,,500,Cost of menu printing (USD/ yr)
+Cost_electricity,posnorm,5000,,10000,Cost of electricity (USD/ yr)
+Cost_water,posnorm,5000,,10000,Cost of water (USD/yr)
+Cost_cooking_gas,posnorm,5000,,20000,Cost of cooking gas (USD/yr)
+Cost_fuel,posnorm,5000,,20000,Cost of fuel (USD/yr)
+Cost_fresh_goods,posnorm,10000,,30000,Cost of fresh goods (USD/ yr)
+Cost_dry_goods,posnorm,10000,,30000,Cost of dry goods (USD/ yr)
+Cost_salary,posnorm,10000,,20000,Cost of payment for staff (USD/ yr)
+Cost_training,posnorm,5000,,15000,Cost of training (USD/ yr)
+Cost_maintenance,posnorm,5000,,10000,Cost of maintenance (USD/ yr)
+Cost_menu_printing,posnorm,2000,,5000,Cost of menu printing (USD/ yr)
 
-Number_student_paid,posnorm,1000,,10000,Number of students paid for lunch 
+Number_student_paid,posnorm,1000,,5000,Number of students paid for lunch 
 Number_student_unpaid,posnorm,100,,500,Number of students not paid for lunch
 Og_funding,posnorm,10000,,50000,Funding from organization (USD/yr)
 Do_funding,posnorm,10000,,30000,Funding from individual donors (USD/yr)
 Profit_enrollment,posnorm,10000,,30000,Profit from enrollment (USD/yr)
-Cost_supplementary_food,posnorm,500,,3000,Cost of supplementary food (USD/ yr)
+Cost_supplementary_food,posnorm,5000,,30000,Cost of supplementary food (USD/ yr)
