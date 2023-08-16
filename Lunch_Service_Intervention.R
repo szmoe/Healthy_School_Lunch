@@ -15,7 +15,7 @@ lunch_service_function <- function(x, varnames) {
 
 # Add risk-adjusted benefits if intervened 
   
-Income_lunchsales <- Number_student_paid * Unit_lunch_value
+Income_lunchsales <- Number_student_paid * Unit_lunch_value * 12
 
 # If students like lunch
 
@@ -120,15 +120,16 @@ Initial_investment_yes_no <- chance_event(If_investment,
                                           value_if_not = 0)
 
 Cost_establishment_with_investment <- if (Initial_investment_yes_no == 1) {
-  vv (Cost_establishment - (Cost_establishment * Initial_investment),
-      var_CV = var_CV,
-      n = 1,
-      relative_trend = inflation_rate)
+  Cost_establishment_with_investment <- vv (Cost_establishment - 
+                                              (Cost_establishment * Initial_investment),
+                                            var_CV, n = 1,
+                                            relative_trend = inflation_rate)
+     
 } else {
-  vv (Cost_establishment,
-      var_CV = var_CV,
-      n = 1,
-      relative_trend = inflation_rate)
+  Cost_establishment_with_investment <- vv (Cost_establishment,
+                                            var_CV, n = 1,
+                                            relative_trend = inflation_rate)
+ 
 }
 
 #Recurring cost due to intervention
