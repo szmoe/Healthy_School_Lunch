@@ -14,8 +14,8 @@ make_variables(decisionSupport::estimate_read_csv(paste("Input_lunch.csv")))
 lunch_service_function <- function(x, varnames) {
 
 # Add risk-adjusted benefits if intervened 
-  
-Income_lunchsales <- Number_student_paid * Unit_lunch_value * 12
+# Calculate lunch income for a year (22 school days per month average)
+Income_lunchsales <- Number_student_paid * Unit_lunch_value * 22 * 12
 
 # If students like lunch
 
@@ -219,7 +219,7 @@ Cost_training_total <- if (Worker_low_skill_yes_no == 1) {
 }
 
 #Cost for free lunch for students from low income family
-Cost_free_lunch <- vv (Unit_lunch_value * Number_student_unpaid,
+Cost_free_lunch <- vv (Unit_lunch_value * Number_student_unpaid * 22 * 12,
                        var_CV, n_years,
                        relative_trend = inflation_rate)
 
@@ -304,7 +304,7 @@ plot_distributions(mcSimulation_object = Lunch_service_simulation_result,
 #plot distribution for the decision
 plot_distributions(mcSimulation_object = Lunch_service_simulation_result, 
                    vars = "decision",
-                   method = 'hist_simple_overlay')
+                   method = 'smooth_simple_overlay')
 
 # Cashflow of the Lunch_service_intervention
 plot_cashflow(mcSimulation_object = Lunch_service_simulation_result, 
