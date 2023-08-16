@@ -46,15 +46,19 @@ Lunch_policy_yes_no <- chance_event(If_lunch_policy,
 #Extra funding from organizations
 Benefit_organizational_funding <- if (Lunch_policy_yes_no == 1) {
   Benefit_organizational_funding = vv (Increased_organizational_funding + 
-                                       Policy_increase_Ogfunding, 
+                                       Policy_increase_Ogfunding + 
+                                         (Non_compliance_risk_funding *
+                                          Increased_organizational_funding), 
                                        var_CV, n_years,
-                                       relative_trend = inflation_rate)*
-                                       Non_compliance_risk_funding
+                                       relative_trend = inflation_rate)
+                                      
  
 } else {
-  vv (Increased_organizational_funding,
+  vv (Increased_organizational_funding +
+      (Non_compliance_risk_funding *
+      Increased_organizational_funding),
       var_CV, n_years,
-      relative_trend = inflation_rate)* Non_compliance_risk_funding
+      relative_trend = inflation_rate)
 }
 
 #Increased funding from organization starts from year 2
@@ -63,33 +67,35 @@ Benefit_organizational_funding[1] <- 0
 #Extra funding from individual donors
 Benefit_individual_funding <- if (Lunch_policy_yes_no == 1) {
   Benefit_individual_funding = vv (Increased_individual_funding +
-                                   Policy_increase_Dofunding,
+                                   Policy_increase_Dofunding +
+                                  (Increased_individual_funding * 
+                                   Non_compliance_risk_funding),
                                    var_CV, n_years,
-                                   relative_trend = inflation_rate)*
-                                   Non_compliance_risk_funding
+                                   relative_trend = inflation_rate)
 } else {
-  vv (Increased_individual_funding,
+  vv (Increased_individual_funding +
+      (Increased_individual_funding * Non_compliance_risk_funding),
       var_CV, n_years,
-      relative_trend = inflation_rate)* Non_compliance_risk_funding
+      relative_trend = inflation_rate)
 }
 
 #Extra lunch sales
 Benefit_lunchsales <- if (Lunch_policy_yes_no == 1) {
-  Benefit_lunchsales = vv (Income_lunchsales + Policy_increase_lunchsales,
+  Benefit_lunchsales = vv (Income_lunchsales + Policy_increase_lunchsales +
+                           (Income_lunchsales * Non_compliance_risk_lunchsale),
                            var_CV, n_years,
-                           relative_trend = inflation_rate)*
-                           Non_compliance_risk_lunchsale
+                           relative_trend = inflation_rate)
 } else {
-  vv (Income_lunchsales,
+  vv (Income_lunchsales + (Income_lunchsales * Non_compliance_risk_lunchsale),
       var_CV, n_years,
-      relative_trend = inflation_rate)* Non_compliance_risk_lunchsale
+      relative_trend = inflation_rate)
 }
 
 #Extra income from increased enrollment
-Benefit_enrollment <- vv (Increased_enrollment,
+Benefit_enrollment <- vv (Increased_enrollment + 
+                          (Increased_enrollment * Non_compliance_risk_funding),
                           var_CV, n_years,
-                          relative_trend = inflation_rate)*
-                          Non_compliance_risk_funding
+                          relative_trend = inflation_rate)
 
 #Enrollment increased from year 2
 Benefit_enrollment[1] <- 0
