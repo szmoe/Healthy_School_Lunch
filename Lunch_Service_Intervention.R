@@ -120,15 +120,13 @@ Initial_investment_yes_no <- chance_event(If_investment,
                                           value_if_not = 0)
 
 Cost_establishment_with_investment <- if (Initial_investment_yes_no == 1) {
-  Cost_establishment_with_investment <- vv (Cost_establishment - 
+  Cost_establishment_with_investment <- c (Cost_establishment - 
                                               (Cost_establishment * Initial_investment),
-                                            var_CV, n = 1,
-                                            relative_trend = inflation_rate)
+                                            rep(0, n_years -1))
      
 } else {
-  Cost_establishment_with_investment <- vv (Cost_establishment,
-                                            var_CV, n = 1,
-                                            relative_trend = inflation_rate)
+  Cost_establishment_with_investment <- c (Cost_establishment,
+                                            rep(0, n_years -1))
  
 }
 
